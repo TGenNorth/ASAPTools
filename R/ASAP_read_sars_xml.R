@@ -5,6 +5,7 @@
 #' @param XML_List A list of XML path.
 #' @param XML_Names A list of XML names.
 #' @return An object with data from the ASAP xml.
+#' @export ASAP_read_sars_xml
 
 ASAP_read_sars_xml <- function(XML_List, XML_Names){
 
@@ -107,3 +108,6 @@ ASAP_read_sars_xml <- function(XML_List, XML_Names){
   }
   return(Final_Out)
 }
+
+
+

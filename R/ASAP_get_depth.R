@@ -2,6 +2,7 @@
 #'
 #' @param List of all XML objects to extract depth data from.
 #' @return An object with data from the ASAP xml.
+#' @export ASAP_get_depth
 
 ASAP_get_depth <- function(FinalList){
 

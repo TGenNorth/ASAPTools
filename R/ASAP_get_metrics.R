@@ -2,6 +2,7 @@
 #'
 #' @param List of all XML objects to extract depth data from.
 #' @return An object with general metrics by sample.
+#' @export ASAP_get_metrics
 
 ASAP_get_metrics <- function(FinalList){
 

@@ -2,6 +2,7 @@
 #'
 #' @param List of all XML objects to extract SNP data from R parsed XML.
 #' @return An object with data regarding SNPS from the ASAP xml.
+#' @export ASAP_get_SNPS
 
 ASAP_get_SNPS <- function(FinalList){
 
