@@ -1,8 +1,13 @@
-#' Process ASAP XML Results
+#' @title Import ASAP XML Results
 #'
+#' @description
+#' This function uses a user provided ASAP results XML path and a user provided XML name to read in the XML into a matrix. Several other functions can then be used to parse the matrix.
 #' @param XML_List A list of XML path.
 #' @param XML_Names A list of XML names.
 #' @return An object with data from the ASAP xml.
+#' @example
+#' XML <- ASAP.read.sars.xml(DirectorytoXML, NameofXML)
+#' @importFrom rvest "html_nodes"
 
 ASAP.read.sars.xml <- function(XML_List, XML_Names){
 

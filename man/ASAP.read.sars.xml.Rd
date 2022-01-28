@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASAP.read.sars.xml.R
 \name{ASAP.read.sars.xml}
 \alias{ASAP.read.sars.xml}
-\title{Process ASAP XML Results}
+\title{Import ASAP XML Results}
 \usage{
 ASAP.read.sars.xml(XML_List, XML_Names)
 }
@@ -15,5 +15,5 @@ ASAP.read.sars.xml(XML_List, XML_Names)
 An object with data from the ASAP xml.
 }
 \description{
-Process ASAP XML Results
+This function uses a user provided ASAP results XML path and a user provided XML name to read in the XML into a matrix. Several other functions can then be used to parse the matrix.
 }
