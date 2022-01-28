@@ -3,7 +3,7 @@
 #' @param List of all XML objects to extract depth data from.
 #' @return An object with general metrics by sample.
 
-ASAP.get.metrics <- function(FinalList){
+ASAP_get_metrics <- function(FinalList){
 
 Out <- data.frame()
 for (i in 1:length(FinalList)) {

@@ -6,7 +6,7 @@
 #' @param XML_Names A list of XML names.
 #' @return An object with data from the ASAP xml.
 
-ASAP.read.sars.xml <- function(XML_List, XML_Names){
+ASAP_read_sars_xml <- function(XML_List, XML_Names){
 
   Final_Out <- NULL
 
