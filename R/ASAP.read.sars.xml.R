@@ -5,9 +5,6 @@
 #' @param XML_List A list of XML path.
 #' @param XML_Names A list of XML names.
 #' @return An object with data from the ASAP xml.
-#' @example
-#' XML <- ASAP.read.sars.xml(DirectorytoXML, NameofXML)
-#' @importFrom rvest "html_nodes"
 
 ASAP.read.sars.xml <- function(XML_List, XML_Names){
 

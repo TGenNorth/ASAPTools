@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "tporter@tge.norg",
            comment = c(ORCID = "NA"))
-Description: Functions for associated processing of phylogenetic data.
+Description: Functions for associated processing of data using the ASAP pipeline.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
