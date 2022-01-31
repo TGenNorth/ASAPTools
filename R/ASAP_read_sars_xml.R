@@ -6,6 +6,11 @@
 #' @param XML_Names A list of XML names.
 #' @return An object with data from the ASAP xml.
 #' @export ASAP_read_sars_xml
+#' @importFrom xml2 read_xml
+#' @importFrom rvest html_nodes
+#' @importFrom stringr str_split
+#' @importFrom stringr str_replace
+#' @importFrom tidyr separate
 
 ASAP_read_sars_xml <- function(XML_List, XML_Names){
 

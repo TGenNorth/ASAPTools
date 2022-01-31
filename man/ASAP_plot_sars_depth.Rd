@@ -3,6 +3,9 @@
 \name{ASAP_plot_sars_depth}
 \alias{ASAP_plot_sars_depth}
 \title{Plot SARS Coverage Depth}
+\usage{
+ASAP_plot_sars_depth(XML_List, XML_Names, Out_Dir)
+}
 \arguments{
 \item{XML_List}{A list of XML path.}
 

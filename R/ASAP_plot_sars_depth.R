@@ -7,9 +7,11 @@
 #' @param Out_Dir A directory of where the output should be saved.
 #' @return Objects should be saved to specified directory.
 #' @export ASAP_plot_sars_depth
+#' @import tidyr
+#' @import tidyverse
 
-library(tidyr)
-library(tidyverse)
+# library(tidyr)
+# library(tidyverse)
 
 ASAP_plot_sars_depth <- function(XML_List, XML_Names, Out_Dir){
 
