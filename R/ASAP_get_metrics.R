@@ -11,8 +11,8 @@ for (i in 1:length(FinalList)) {
 
   Temp <- cbind(Run = FinalList[[i]]$XML,
                 Sequence_Name = FinalList[[i]]$Sequence_Name,
-                Average_Depth = ifelse(is_empty(FinalList[[i]]$Average_Depth), 0, FinalList[[i]]$Average_Depth),
-                Breadth = ifelse(is_empty(FinalList[[i]]$Breadth), 0, FinalList[[i]]$Breadth),
+                Average_Depth = ifelse(rlang::is_empty(FinalList[[i]]$Average_Depth), 0, FinalList[[i]]$Average_Depth),
+                Breadth = ifelse(rlang::is_empty(FinalList[[i]]$Breadth), 0, FinalList[[i]]$Breadth),
                 Mapped = FinalList[[i]]$Mapped_Reads,
                 Unmapped_Reads = FinalList[[i]]$Unmapped_Reads,
                 Unassigned = FinalList[[i]]$Unassigned_reads)
