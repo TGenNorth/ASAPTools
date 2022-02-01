@@ -14,3 +14,13 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Depends: 
+    R (>= 3.6)
+Imports: dplyr,
+	purrr,
+	rvest,
+	stringr,
+	tidyr,
+	tidyverse, 
+	xml2,
+	ggplot2

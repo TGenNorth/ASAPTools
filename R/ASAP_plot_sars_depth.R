@@ -9,9 +9,10 @@
 #' @export ASAP_plot_sars_depth
 #' @import tidyr
 #' @import tidyverse
+#' @import ggplot2
 
-# library(tidyr)
-# library(tidyverse)
+library(tidyr)
+library(tidyverse)
 
 ASAP_plot_sars_depth <- function(XML_List, XML_Names, Out_Dir){
 
