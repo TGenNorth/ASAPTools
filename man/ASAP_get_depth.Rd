@@ -2,16 +2,16 @@
 % Please edit documentation in R/ASAP_get_depth.R
 \name{ASAP_get_depth}
 \alias{ASAP_get_depth}
-\title{Process ASAP XML List for Depth Data}
+\title{Process ASAP DF for Depth Data}
 \usage{
-ASAP_get_depth(FinalList)
+ASAP_get_depth(read.ASAP.df)
 }
 \arguments{
-\item{List}{of all XML objects to extract depth data from.}
+\item{read.ASAP}{imported df}
 }
 \value{
-An object with data from the ASAP xml.
+An object with data from the read.ASAP dataframe.
 }
 \description{
-Process ASAP XML List for Depth Data
+Function will use a user specified dataframe from read.ASAP function and parse the depth data into a df that can be easily plotted.
 }

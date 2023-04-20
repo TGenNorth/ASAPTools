@@ -1,44 +1,47 @@
-#' Process ASAP XML List for Depth Data
-#'
-#' @param List of all XML objects to extract depth data from.
-#' @return An object with data from the ASAP xml.
+#' Process ASAP DF for Depth Data
+#' @description
+#' Function will use a user specified dataframe from read.ASAP function and parse the depth data into a df that can be easily plotted.
+#' @param read.ASAP imported df
+#' @return An object with data from the read.ASAP dataframe.
 #' @export ASAP_get_depth
 #' @importFrom dplyr bind_rows
 #' @importFrom stringr str_replace
 
-ASAP_get_depth <- function(FinalList){
+ASAP_get_depth <- function(read.ASAP.df){
 
-Depth_Out <- data.frame()
+  depth_out <- data.frame()
 
-for (i in 1:length(FinalList)) {
+  for (i in 1:nrow(read.ASAP.df)) {
 
-  Run = FinalList[[i]]$XML
+    run = read.ASAP.df$run[[i]]
 
-  Sequence_Name = FinalList[[i]]$Sequence_Name
+    name = read.ASAP.df$name[[i]]
 
-  Average_Breadth <- FinalList[[i]]$Breadth
+    assay_name = read.ASAP.df$assay_name[[i]]
 
-  Depth <- FinalList[[i]]$Depths
+    avg_breadth <- read.ASAP.df$breadth[[i]]
 
-  Depth <- stringr::str_replace_all(Depth, "\"", "")
+    depth <- read.ASAP.df$depths[[i]]
 
-  Depth <- unlist(strsplit(Depth, ","))
+    # Depth <- stringr::str_replace_all(Depth, "\"", "")
 
-  Depth <- as.numeric(Depth)
+    depth <- unlist(strsplit(depth, ","))
 
-  Position <- seq(1:length(Depth))
+    depth <- as.numeric(depth)
 
-  Temp <- as.data.frame(cbind(Run, Sequence_Name, Position, Depth, Average_Breadth))
+    position <- seq(1:length(depth))
 
-  Depth_Out <- dplyr::bind_rows(Depth_Out, Temp)
+    temp <- as.data.frame(cbind(run, name, assay_name, position, depth, avg_breadth))
 
-  print(paste("Processing complete for:", Sequence_Name))
-}
+    depth_out <- dplyr::bind_rows(depth_out, temp)
 
-Depth_Out$Position <- as.numeric(as.character(Depth_Out$Position))
-Depth_Out$Depth <- as.numeric(as.character(Depth_Out$Depth))
+    print(paste("Processing complete for:", name))
+  }
 
-Depth_Out$Average_Breadth <- as.numeric(as.character(Depth_Out$Average_Breadth))
+  depth_out$position <- as.numeric(as.character(depth_out$position))
+  depth_out$depth <- as.numeric(as.character(depth_out$depth))
 
-return(Depth_Out)
+  depth_out$avg_breadth <- as.numeric(as.character(depth_out$avg_breadth))
+
+  return(depth_out)
 }
