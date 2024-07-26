@@ -17,72 +17,81 @@
 find.primers <- function(fasta.path, primer.names, primer.direction, primer.list, max.mismatch){
 
   # Read the FASTA file
-  sequences <- Biostrings::readDNAStringSet(fasta.path)
+  sequence_file <- Biostrings::readDNAStringSet(fasta.path)
 
   # Iterate over each sequence in the FASTA file
   bed_data <- foreach(i = 1:length(primer.list), .combine = rbind) %do% {
 
-      ASSAY <- names(sequences)[[1]]
       PRIMER <- primer.names[[i]]
       PRIMER_DIRECTION <- primer.direction[[i]]
       PRIMER_SEQUENCE <- primer.list[[i]]
 
+      Combine_Out <- data.frame()
 
-      Temp <- matchPattern(pattern = PRIMER_SEQUENCE, subject = as.character(sequences),
-                     max.mismatch=max.mismatch, with.indels=T, fixed=TRUE,
-                     algorithm="auto")
+      for (GENE in 1:length(sequence_file)) {
 
-      if(nrow(data.frame(Temp)) > 0) {
+        sequences <- sequence_file[[GENE]]
 
-        Out <- cbind(assay = ASSAY,
-                     primer = PRIMER,
-                     direction = PRIMER_DIRECTION,
-                     primer.sequence = PRIMER_SEQUENCE,
-                     primer.search = PRIMER_SEQUENCE,
-                     searched.direction = "Forward",
-                     data.frame(Temp))
+        ASSAY <- names(sequence_file)[[GENE]]
 
-      }else{
+        Temp <- matchPattern(pattern = PRIMER_SEQUENCE, subject = as.character(sequences),
+                       max.mismatch=max.mismatch, with.indels=T, fixed=TRUE,
+                       algorithm="auto")
+
+        if(nrow(data.frame(Temp)) > 0) {
+
           Out <- cbind(assay = ASSAY,
                        primer = PRIMER,
                        direction = PRIMER_DIRECTION,
                        primer.sequence = PRIMER_SEQUENCE,
                        primer.search = PRIMER_SEQUENCE,
                        searched.direction = "Forward",
+                       data.frame(Temp))
+
+        }else{
+            Out <- cbind(assay = ASSAY,
+                         primer = PRIMER,
+                         direction = PRIMER_DIRECTION,
+                         primer.sequence = PRIMER_SEQUENCE,
+                         primer.search = PRIMER_SEQUENCE,
+                         searched.direction = "Forward",
+                         start = NA,
+                         end = NA,
+                         width = NA,
+                         seq = NA)
+        }
+
+        ## Do reverse compliment search
+        Temp <- matchPattern(pattern = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))), subject = as.character(sequences),
+                             max.mismatch=max.mismatch, with.indels=T, fixed=TRUE,
+                             algorithm="auto")
+
+        if(nrow(data.frame(Temp)) > 0) {
+
+          Out <- rbind(Out, cbind(assay = ASSAY,
+                       primer = PRIMER,
+                       direction = PRIMER_DIRECTION,
+                       primer.sequence = PRIMER_SEQUENCE,
+                       primer.search = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))),
+                       searched.direction = "Reverse",
+                       data.frame(Temp)))
+
+        }else{
+          Out <- rbind(Out, cbind(assay = ASSAY,
+                       primer = PRIMER,
+                       direction = PRIMER_DIRECTION,
+                       primer.sequence = PRIMER_SEQUENCE,
+                       primer.search = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))),
+                       searched.direction = "Reverse",
                        start = NA,
                        end = NA,
                        width = NA,
-                       seq = NA)
+                       seq = NA))
+        }
+        Combine_Out <- rbind(Combine_Out, Out)
       }
 
-      ## Do reverse compliment search
-      Temp <- matchPattern(pattern = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))), subject = as.character(sequences),
-                           max.mismatch=max.mismatch, with.indels=T, fixed=TRUE,
-                           algorithm="auto")
-
-      if(nrow(data.frame(Temp)) > 0) {
-
-        Out <- rbind(Out, cbind(assay = ASSAY,
-                     primer = PRIMER,
-                     direction = PRIMER_DIRECTION,
-                     primer.sequence = PRIMER_SEQUENCE,
-                     primer.search = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))),
-                     searched.direction = "Reverse",
-                     data.frame(Temp)))
-
-      }else{
-        Out <- rbind(Out, cbind(assay = ASSAY,
-                     primer = PRIMER,
-                     direction = PRIMER_DIRECTION,
-                     primer.sequence = PRIMER_SEQUENCE,
-                     primer.search = as.character(reverseComplement(DNAString(PRIMER_SEQUENCE))),
-                     searched.direction = "Reverse",
-                     start = NA,
-                     end = NA,
-                     width = NA,
-                     seq = NA))
-      }
-      Out
+      Combine_Out
   }
 
   bed_data$Mismatches <- NA
@@ -98,6 +107,16 @@ find.primers <- function(fasta.path, primer.names, primer.direction, primer.list
   return(bed_data)
 }
 
+###################################
+# Testing
+###################################
+
+# fasta.path = "/scratch/tporter/TB_20240726_AmpSeq_Bedfile/reference.fasta"
+# Primers <- read_csv("/scratch/tporter/TB_20240726_AmpSeq_Bedfile/temp_primer_list_ed.csv")
+# primer.names = Primers$Names
+# primer.direction = Primers$Direction
+# primer.list = Primers$Primer
+# max.mismatch = 2
 
 
 # fasta.path <- "/scratch/tporter/RSV_20230402_SequencingMethodCompare_SQL/KT992094.fasta"
