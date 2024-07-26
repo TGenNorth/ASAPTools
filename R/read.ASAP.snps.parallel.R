@@ -22,7 +22,7 @@ read.ASAP.snps.parallel <- function(XML, cores){
 
   Out <- data.frame()
 
-  xml_data <- read_xml(XML)
+  xml_data <- read_xml(XML, options = "HUGE")
 
   Run_Info = cbind(run = xml_attrs(xml_data))
 
@@ -147,3 +147,15 @@ read.ASAP.snps.parallel <- function(XML, cores){
   stopCluster(cl)
   return(Out)
 }
+
+
+# library(xml2)
+# library(tidyverse)
+# library(foreach)
+# library(doParallel)
+# library(parallelly)
+#
+# Temp <- read.ASAP.snps.parallel("/scratch/tporter/RSV_20230825_ROI_Formatting/RSV_NovaSeq0008_NEB_SQL/RSV_NovaSeq0008_NEB_SQL_analysis.xml", parallelly::availableCores())
+
+
+

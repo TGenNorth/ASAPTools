@@ -1,26 +1,30 @@
-#' @title Read ASAP SNP Results
-#'
+#' @title Read ASAP Significance Messages
 #' @description
-#' This function uses a user provided ASAP results XML path to parse sample and assay information from the ASAP output and display the SNPs.
+#' This function uses a user provided ASAP results XML path to parse sample and assay information from the ASAP output and display the significance.
 #' @param XML A path with the ASAP XML file to parse.
 #' @return An object with data from the ASAP xml.
-#' @export read.ASAP.snps
+#' @export read.ASAP.significance
 #' @import xml2
 #' @import tidyverse
-#'
 
-read.ASAP.snps <- function(XML){
+library(xml2)
+library(tidyverse)
+
+XML <- "/scratch/djasso-selles/NGARD/Su_Tuberculosis_project2021/17Aug2022_TannerASAP/17Aug2022_TannerASAP_analysis.xml"
+
+read.ASAP.significance <- function(XML){
 
   Out <- data.frame()
 
-  xml_data <- read_xml(XML, options = "HUGE")
+  xml_data <- read_xml(XML)
 
   Run_Info = cbind(run = xml_attrs(xml_data))
 
   #for each sample create a node list with specific child
-  for (SAMPLE in 1:xml_length(xml_data)) {
+  for (SAMPLE in 7:8) { #1:xml_length(xml_data)
 
-    #SAMPLE = 24
+    SAMPLE <- 7
+
     #Subset xml_data
     Sample_Node <- xml_child(xml_data, SAMPLE)
 
@@ -37,7 +41,7 @@ read.ASAP.snps <- function(XML){
     #For each assay within a sample
     for (ASSAY in 1:xml_length(Sample_Node)) {
 
-      #ASSAY = 1
+      ASSAY = 4
       #subset Sample node to assay
       Assay_Node <- xml_child(Sample_Node, ASSAY)
 
@@ -51,10 +55,14 @@ read.ASAP.snps <- function(XML){
         assay_type = xml_attr(Assay_Node, "type")
       )
 
+      as.character(xml_child(Amplicon_Node, "significance"))
+
+      xml_attrs(Assay_Node, attr)
+
       #For each amplicon in assay:
       for(AMPLICON in 1:xml_length(Assay_Node)){
 
-        #AMPLICON = 1
+        AMPLICON = 1
         #Get a single amplicon node
         Amplicon_Node <- xml_child(Assay_Node, AMPLICON)
 
@@ -64,19 +72,24 @@ read.ASAP.snps <- function(XML){
 
         Amplicon_Info <- cbind(
           #Add the amplicon number to the amp_info
-          amplicon_number = AMPLICON
-          #Parse out number of reads in amplicon
-          #Amplicon_reads = xml_attrs(Amplicon_Node, "reads"),
-          #Parse out the breadth of coverage
-          #Breadth = as.character(xml_contents(xml_child(Amplicon_Node, "breadth"))),
-          #Parse out the average breadth
-          #Avg_Depth = as.character(xml_contents(xml_child(Amplicon_Node, "average_depth")))
+          amplicon_number = AMPLICON,
+          amplicon_significance = NA,
+          amplicon_significance_flag = NA
         )
 
         for (SNP in 1:xml_length(Amplicon_Node)) {
           #SNP = 1
           #Get a single amplicon node
           SNP_Node <- xml_child(Amplicon_Node, SNP)
+
+          if (xml_name(SNP_Node) == "significance"){
+
+            Amplicon_Info[1,2] <- ifelse(length(xml_text(SNP_Node)) > 0, length(xml_text(SNP_Node)) > 0, NA)
+
+            Amplicon_Info[1,3] <- ifelse(length(as.character(xml_attrs(SNP_Node))) > 0, as.character(xml_attrs(SNP_Node)), NA)
+            length(xml_text(SNP_Node)) > 0
+
+          }
 
           if (xml_name(SNP_Node) == "snp"){
 
@@ -117,9 +130,6 @@ read.ASAP.snps <- function(XML){
             Temp <- cbind(Run_Info, Sample_Info, Assay_Info, Amplicon_Info, SNP_Info)
 
             Out <- rbind(Out, Temp)
-
-
-
           }
 
 
