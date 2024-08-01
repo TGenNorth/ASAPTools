@@ -22,7 +22,7 @@ create.asap.bed.file <- function(find.primers.df, save.path = NA){
 
   # If save.path was specified save it to that directory.
   if(!is.na(save.path)){
-    write.table(Temp, file= save.path, sep='\t', row.names = F)
+    write.table(Temp, file= save.path, sep='\t', row.names = F, quote = F)
   }
 
   # Return the asap bed file to R env.
