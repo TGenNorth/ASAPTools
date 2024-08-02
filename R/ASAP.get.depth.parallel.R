@@ -1,21 +1,26 @@
-#' Process ASAP DF for Depth Data
+#' Process ASAP DF for Depth Data in parallel
 #' @description
 #' Function will use a user specified dataframe from read.ASAP function and parse the depth data into a df that can be easily plotted.
 #' @param read.ASAP.df imported df
+#' @param num_cores number of cores to use for parallel processing
 #' @return An object with data from the read.ASAP dataframe.
-#' @export ASAP.get.depth
+#' @export ASAP.get.depth.parallel
 #' @importFrom dplyr bind_rows
 #' @importFrom stringr str_replace
 #' @importFrom foreach foreach %dopar%
 #' @importFrom doParallel registerDoParallel
 
-ASAP.get.depth <- function(read.ASAP.df) {
+ASAP.get.depth.parallel <- function(read.ASAP.df, num_cores = 1) {
   library(dplyr)
   library(stringr)
   library(foreach)
   library(doParallel)
 
-  depth_out <- foreach(i = 1:nrow(read.ASAP.df), .combine = bind_rows) %do% {
+  # Register parallel backend
+  cl <- makeCluster(num_cores)
+  registerDoParallel(cl)
+
+  depth_out <- foreach(i = 1:nrow(read.ASAP.df), .combine = bind_rows) %dopar% {
     run <- read.ASAP.df$run[[i]]
     name <- read.ASAP.df$name[[i]]
     assay_name <- read.ASAP.df$assay_name[[i]]
@@ -32,6 +37,9 @@ ASAP.get.depth <- function(read.ASAP.df) {
     print(paste("Processing complete for:", name))
     return(temp)
   }
+
+  # Stop the parallel cluster
+  stopCluster(cl)
 
   depth_out$position <- as.numeric(as.character(depth_out$position))
   depth_out$depth <- as.numeric(as.character(depth_out$depth))
