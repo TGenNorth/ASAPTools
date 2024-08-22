@@ -122,7 +122,10 @@ read.ASAP.snps.individual <- function(XML){
     print(paste("Processing complete for:", xml_attr(Sample_Node, "name")))
   }
 
-  row.names(Out) <- 1:nrow(Out)
+  if(nrow(Out > 0)){
+
+    row.names(Out) <- 1:nrow(Out)
+  }
 
   return(Out)
 
