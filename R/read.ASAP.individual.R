@@ -17,7 +17,6 @@ read.ASAP.individual <- function(XML){
 
   Run_Info = cbind(run = "Individual_XML_processing")
 
-
   #SAMPLE = 5
   #Subset xml_data
   Sample_Node <- xml_data
@@ -96,3 +95,5 @@ read.ASAP.individual <- function(XML){
   return(Out)
 
 }
+
+
