@@ -122,5 +122,9 @@ read.ASAP.parallel <- function(XML, cores){
     Temp_Out
     }
   stopCluster(cl)
+
+  #Turn a bunch of columns to numeric.
+  Out[c(3:5,11,13,14)] <- lapply(Out[c(3:5,11,13,14)],as.numeric)
+
   return(Out)
 }
